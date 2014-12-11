@@ -10,6 +10,7 @@ from pysb.integrate import Solver
 import numpy as np
 import theano
 import theano.tensor as t
+import pickle
 
 from basic_COX2_model import model as cox2_model
 
@@ -20,7 +21,11 @@ tspan = np.linspace(0,10, num=100)
 solver = Solver(cox2_model, tspan)
 
 #Add import of experimental data here
+exp_data_PG = np.loadtxt('exp_data_pg.txt')
+exp_data_PGG = np.loadtxt('exp_data_pgg.txt')
 
+exp_data_sd_PG = np.loadtxt('exp_data_sd_pg.txt')
+exp_data_sd_PGG = np.loadtxt('exp_data_sd_pgg.txt')
 
 #Experimental starting values of AA and 2-AG (all in microM)
 exp_cond_AA = [0, .5, 1, 2, 4, 8, 16]
@@ -28,7 +33,7 @@ exp_cond_AG = [0, .5, 1, 2, 4, 8, 16]
 
 #Likelihood function to generate simulated data that corresponds to experimental time points
 @theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar] \
-,otypes=[t.dscalar, t.dscalar])
+,otypes=[t.dmatrix, t.dmatrix])
 def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3, KD_AG_cat1, \
     kcat_AG1, KD_AG_cat2, KD_AG_cat3, kcat_AG3, KD_AA_allo1, KD_AA_allo2, KD_AA_allo3, KD_AG_allo1, KD_AG_allo2, KD_AG_allo3):
     
@@ -114,11 +119,18 @@ with model:
     PG_output, PGG_output = likelihood(model.KD_AA_cat1, model.kcat_AA1, model.KD_AA_cat2, model.kcat_AA2, model.KD_AA_cat3, model.kcat_AA3, model.KD_AG_cat1, \
     model.kcat_AG1, model.KD_AG_cat2, model.KD_AG_cat3, model.kcat_AG3, model.KD_AA_allo1, model.KD_AA_allo2, model.KD_AA_allo3, model.KD_AG_allo1, model.KD_AG_allo2, model.KD_AG_allo3)
     
-    #pm.Normal('PGs_observed', mu=PG_output, sd=1, observed=exp_data_PG)
-    #pm.Normal('PGGs_observed', mu=PGG_output, sd=1, observed=exp_data_PGG)
+    pm.Normal('PGs_observed', mu=PG_output, sd=exp_data_sd_PG, observed=exp_data_PG)
+    pm.Normal('PGGs_observed', mu=PGG_output, sd=exp_data_sd_PGG, observed=exp_data_PGG)
     
     #Select MCMC stepping method
     step = pm.Metropolis()
     
-    trace = pm.sample(1e6, steps, njobs=None)
+    trace = pm.sample(1.1e6, step)
+    
+    dictionary_to_pickle = {}
+    for dictionary in trace:
+        for var in dictionary:
+           dictionary_to_pickle[var] = trace[var] 
+    
+    pickle.dump(dictionary_to_pickle, open('2014_12_10_COX2_parameter_fits.p', 'wb'))
     
