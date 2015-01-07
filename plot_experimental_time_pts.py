@@ -53,26 +53,28 @@ for AA_init in exp_cond_AA:
 # Plot output (PG and PGGs)
 PG_row_start = 1
 for axis, condition in zip([pg_ax1, pg_ax2, pg_ax3, pg_ax4, pg_ax5, pg_ax6], exp_cond_AA[1::]):
-    axis.plot(exp_cond_AG, PG_array[PG_row_start,:], label='simulation')
-    axis.errorbar(exp_cond_AG, exp_data_PG[PG_row_start,:], yerr=exp_data_sd_PG[PG_row_start, :], label='experiment')
+    axis.plot(exp_cond_AG, PG_array[PG_row_start,:], label='sim')
+    axis.errorbar(exp_cond_AG, exp_data_PG[PG_row_start,:], yerr=exp_data_sd_PG[PG_row_start, :], label='exp')
     axis.set_title(str(condition)+' microM AA')
     axis.set_xlabel('[2-AG] (microM)')
     axis.set_ylabel('PGs (microM)')
     axis.set_ylim(0, .24)
-    axis.legend(loc=4, fontsize='x-small')
+    axis.set_xlim(0, 16.5)
+    axis.legend(loc=1, fontsize='xx-small')
     PG_row_start += 1
 PG_fig.subplots_adjust(wspace=.5, hspace=1)
 PG_fig.show()
 
 PGG_col_start = 1
 for axis, condition in zip([pgg_ax1, pgg_ax2, pgg_ax3, pgg_ax4, pgg_ax5, pgg_ax6], exp_cond_AG[1::]):
-    axis.plot(exp_cond_AA, PGG_array[:,PGG_col_start], label='simulation', )
-    axis.errorbar(exp_cond_AG, exp_data_PGG[:, PGG_col_start], yerr=exp_data_sd_PGG[:, PGG_col_start], label='experiment')
+    axis.plot(exp_cond_AA, PGG_array[:,PGG_col_start], label='sim', )
+    axis.errorbar(exp_cond_AG, exp_data_PGG[:, PGG_col_start], yerr=exp_data_sd_PGG[:, PGG_col_start], label='exp')
     axis.set_title(str(condition)+' microM AG')
     axis.set_xlabel('[AA] (microM)')
     axis.set_ylabel('PGGs (microM)')
     axis.set_ylim(0, .18)
-    axis.legend(fontsize='x-small')
+    axis.set_xlim(0, 16.5)
+    axis.legend(loc=1, fontsize='xx-small')
     PGG_col_start += 1
 PGG_fig.subplots_adjust(wspace=.5, hspace=1)
 PGG_fig.show()
