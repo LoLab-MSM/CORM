@@ -7,6 +7,7 @@ Created on Fri Dec 26 16:20:59 2014
 
 import numpy as np
 import re
+from pymc.stats import hpd
 
 def gelman_rubin_trace_dict(trace_dict):
     Rhat = {}
@@ -103,5 +104,20 @@ def check_thermoboxes(param_dict, log=True):
     
     return thermo_dict
 
+def calc_credible_intervals(trace_arr, trace_dict, alpha=.05):
+    hpd_dict = {}
+    
+    for i, key in enumerate(trace_dict.keys()):
+        hpd_dict[key] = hpd(trace_arr[:,i], alpha)
+        
+    return hpd_dict
 
+def credible_interval_array(hpd_dict):
+    hpd_array = np.zeros((len(hpd_dict), len(hpd_dict[hpd_dict.keys()[0]])))
+    i = 0
+    for var in hpd_dict.keys():
+        hpd_array[i] = hpd_dict[var]
+        i += 1
+
+    return hpd_array
 
