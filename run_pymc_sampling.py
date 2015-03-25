@@ -21,11 +21,12 @@ tspan = np.linspace(0,10, num=100)
 solver = Solver(cox2_model, tspan)
 
 #Add import of experimental data here
-exp_data_PG = np.loadtxt('exp_data_pg.txt')
-exp_data_PGG = np.loadtxt('exp_data_pgg.txt')
+location = '/Users/Erin/git/COX2/exp_data/'
+exp_data_PG = np.loadtxt(location+'exp_data_pg.txt')
+exp_data_PGG = np.loadtxt(location+'exp_data_pgg.txt')
 
-exp_data_sd_PG = np.loadtxt('exp_data_sd_pg.txt')
-exp_data_sd_PGG = np.loadtxt('exp_data_sd_pgg.txt')
+exp_data_sd_PG = np.loadtxt(location+'exp_data_sd_pg.txt')
+exp_data_sd_PGG = np.loadtxt(location+'exp_data_sd_pgg.txt')
 
 #Experimental starting values of AA and 2-AG (all in microM)
 exp_cond_AA = [0, .5, 1, 2, 4, 8, 16]
@@ -111,32 +112,32 @@ def likelihood(KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3, \
                 arr_col = 0
         arr_row += 1
       
-    print 'PG_error: ', np.sum(PG_array-exp_data_PG)
-    print 'PGG_error: ', np.sum(PGG_array-exp_data_PGG)
+    #print 'PG_error: ', np.sum(PG_array-exp_data_PG)
+    #print 'PGG_error: ', np.sum(PGG_array-exp_data_PGG)
     return PG_array, PGG_array
 
 @theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox1(KD_AA_cat3, KD_AA_allo1, KD_AA_allo2):
     box1 = (1/(10**KD_AA_cat1))*(1/(10**KD_AA_allo2))*(10**KD_AA_cat3)*(10**KD_AA_allo1)
-    print 'box1: ',box1
+    #print 'box1: ',box1
     return np.array(box1, dtype='float64')
     
 @theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox2(KD_AA_allo1, KD_AA_allo3, KD_AG_cat3):
     box2 = (1/(10**KD_AA_allo1))*(1/(10**KD_AG_cat3))*(10**KD_AA_allo3)*(10**KD_AG_cat1)
-    print 'box2: ',box2
+    #print 'box2: ',box2
     return np.array(box2, dtype='float64')
     
 @theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox3(KD_AA_cat2, KD_AG_allo1, KD_AG_allo2):
     box3 = (1/(10**KD_AG_allo1))*(1/(10**KD_AA_cat2))*(10**KD_AG_allo2)*(10**KD_AA_cat1)
-    print 'box3: ',box3
+    #print 'box3: ',box3
     return np.array(box3, dtype='float64')
 
 @theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox4(KD_AG_cat2, KD_AG_allo1):
     box4 = (1/(10**KD_AG_cat1))*(1/(10**KD_AG_allo3))*(10**KD_AG_cat2)*(10**KD_AG_allo1)
-    print 'box4: ',box4
+    #print 'box4: ',box4
     return np.array(box4, dtype='float64')
 
 #Setting up PyMC model
@@ -201,10 +202,9 @@ with model:
     #start2 = {('KD_AA_cat1',np.log10(cox2_model.parameters['kr_AA_cat1'].value/cox2_model.parameters['kf_AA_cat1'].value)), ('kcat_AA1', np.log10(cox2_model.parameters['kcat_AA1'].value)), ('KD_AA_cat2',-2.76), ('kcat_AA2',.235), ('KD_AA_cat3',-2.265), ('kcat_AA3',.1760), ('KD_AG_cat1', np.log10(cox2_model.parameters['kr_AG_cat1'].value/cox2_model.parameters['kf_AG_cat1'].value)), ('kcat_AG1', np.log10(cox2_model.parameters['kcat_AG1'].value)), ('KD_AG_cat2',-.7495), ('KD_AG_cat3',-2.793), ('kcat_AG3',-.5095), ('KD_AA_allo1',2.290), ('KD_AA_allo2',.1001), ('KD_AA_allo3',-.3808), ('KD_AG_allo1',2.280), ('KD_AG_allo2', np.log10(cox2_model.parameters['kr_AG_allo2'].value/cox2_model.parameters['kf_AG_allo2'].value)), ('KD_AG_allo3',1.650)}   
     
     #Select MCMC stepping method
-    step = pm.Dream(nseedchains=120, save_history=True, blocked=True)
+    step = pm.Dream(nseedchains=120, save_history=True, blocked=True, snooker=0)
     
-    
-    trace = pm.sample(250000, step, njobs=5)
+    trace = pm.sample(500000, step, njobs=5)
     
     dictionary_to_pickle = {}
     print len(trace)
@@ -212,5 +212,5 @@ with model:
         for var in dictionary:
            dictionary_to_pickle[var] = trace[var] 
     
-    pickle.dump(dictionary_to_pickle, open('2014_12_28_Dream_COX2_parameter_fits.p', 'wb'))
+    pickle.dump(dictionary_to_pickle, open('COX2_Dream_samples.p', 'wb'))
     
