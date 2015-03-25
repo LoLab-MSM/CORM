@@ -1,2 +1,2 @@
-COX2_kinetics
+COX2 Reaction Model
 =============
