@@ -122,6 +122,14 @@ Observable('obsPG', PG())
 Observable('obsPGG', PGG())
 Observable('obsAA', AA())
 Observable('obsAG', AG())
+Observable('obsAAallo', COX2(allo=1, cat=None) % AA(b=1))
+Observable('obsAAcat', COX2(cat=1, allo=None) % AA(b=1))
+Observable('obsAAboth', COX2(cat=1, allo=2) % AA(b=1) % AA(b=2))
+Observable('obsAGallo', COX2(allo=1, cat=None) % AG(b=1))
+Observable('obsAGcat', COX2(cat=1, allo=None) % AG(b=1))
+Observable('obsAGboth', COX2(cat=1, allo=2) % AG(b=1) % AG(b=2))
+Observable('obsAAcatAGallo', COX2(cat=1, allo=2) % AA(b=1) % AG(b=2))
+Observable('obsAGcatAAallo', COX2(cat=1, allo=2) % AG(b=1) % AA(b=2))
 
 
 
