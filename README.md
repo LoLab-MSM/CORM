@@ -42,7 +42,7 @@ from corm import model
 ```
 from an iPython session.
 
-We also provide an iPython notebook that will walk you through how CORM is defined [here](insert link).
+We also provide an iPython notebook that will walk you through how CORM is defined [here](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/LoLab-VU/CORM/master/corm_tutorial.ipynb).
 
 Fitting CORM Parameters
 -----------------------
