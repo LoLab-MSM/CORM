@@ -7,7 +7,7 @@ COX-2 turnover of AA or 2-AG produces prostaglandins (PGs) or prostaglandin glyc
 Quickstart
 ----------
 
-To facilitate easy use of CORM, we provide a virtual machine with everything you need to run CORM already installed.  You can download it [here](http://puma.mc.vanderbilt.edu:8000/virtual_machines/CORM_demo.ova) Warning: 1.4G file.
+To facilitate easy use of CORM, we provide a virtual machine with everything you need to run CORM already installed.  You can download it [here](http://puma.mc.vanderbilt.edu:8000/virtual_machines/CORM_demo.ova). Warning: 1.4G file.
 
 Installation
 ------------
