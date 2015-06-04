@@ -5,7 +5,7 @@ Created on Mon Dec  8 19:56:12 2014
 @author: Erin
 """
 
-from pysb import *
+from pysb import Model, Monomer, Parameter, Initial, Rule, Observable
 from pysb.macros import bind, bind_complex, catalyze
 
 Model()
@@ -37,8 +37,8 @@ Initial(PGG(), PGG_0)
 
 #Rates for AA and COX2 interactions at catalytic site
 Parameter('kf_AA_cat1', 1000.0)
-Parameter('kr_AA_cat1', 830.0)
-Parameter('kcat_AA1', 1.3)
+Parameter('kr_AA_cat1', 8200) #830
+Parameter('kcat_AA1', 20.5) #1.3
 Parameter('kf_AA_cat2', 1.0e-3)
 Parameter('kr_AA_cat2', 3.3e-6)
 Parameter('kcat_AA2', 2.3)
@@ -48,15 +48,15 @@ Parameter('kcat_AA3', 1.3)
 
 #Rates for 2-AG and COX2 interactions at catalytic site
 Parameter('kf_AG_cat1', 1000.0)
-Parameter('kr_AG_cat1', 760.0)
-Parameter('kcat_AG1', 1.2)
+Parameter('kr_AG_cat1', 4700.0) #760
+Parameter('kcat_AG1', 11.1) #1.2
 Parameter('kf_AG_cat2', 1.0e-3)
 Parameter('kr_AG_cat2', 4.8e-4)
 Parameter('kf_AG_cat3', 1.0e-3)
 Parameter('kr_AG_cat3', 1.9e-6)
 Parameter('kcat_AG3', 0.21)
 
-#Rates for AA and COX2 intreactions at allosteric site
+#Rates for AA and COX2 interactions at allosteric site
 Parameter('kf_AA_allo1', 1000.0)
 Parameter('kr_AA_allo1', 1.0e5)
 Parameter('kf_AA_allo2', 1000.0)

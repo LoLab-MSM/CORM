@@ -11,10 +11,41 @@ import numpy as np
 import theano
 import theano.tensor as t
 import pickle
+from pymc.backends import text
+from mpi4py import MPI
+import uuid
+import os
+import scipy
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
 
 from basic_COX2_model import model as cox2_model
 
 model = pm.Model()
+
+u = None
+if rank == 0:
+    u = str(uuid.uuid4())
+    for rankn in range(1,size):
+        comm.send(u, dest=rankn, tag=1)
+
+else:
+    u = comm.recv(source=0, tag=1)
+
+basetmp = '/tmp/shockle'
+catalog_dir = os.path.join(basetmp, 'pythoncompiled',  u+'-'+str(rank))
+intermediate_dir = os.path.join(basetmp, 'pythonintermediate',  u+'-'+str(rank))
+theano_dir = os.path.join(basetmp, 'theanocompiled', u+'-'+str(rank))
+
+os.makedirs(catalog_dir, mode=0o700)
+os.makedirs(intermediate_dir, mode=0o700)
+os.makedirs(theano_dir, mode=0o700)
+
+#monkeypatching the catalog and intermediate_dir
+scipy.weave.inline_tools.function_catalog = scipy.weave.catalog.catalog(catalog_dir)
+scipy.weave.catalog.intermediate_dir = lambda: intermediate_dir
 
 #Initialize PySB solver object for simulations
 tspan = np.linspace(0,10, num=100)
@@ -202,15 +233,22 @@ with model:
     #start2 = {('KD_AA_cat1',np.log10(cox2_model.parameters['kr_AA_cat1'].value/cox2_model.parameters['kf_AA_cat1'].value)), ('kcat_AA1', np.log10(cox2_model.parameters['kcat_AA1'].value)), ('KD_AA_cat2',-2.76), ('kcat_AA2',.235), ('KD_AA_cat3',-2.265), ('kcat_AA3',.1760), ('KD_AG_cat1', np.log10(cox2_model.parameters['kr_AG_cat1'].value/cox2_model.parameters['kf_AG_cat1'].value)), ('kcat_AG1', np.log10(cox2_model.parameters['kcat_AG1'].value)), ('KD_AG_cat2',-.7495), ('KD_AG_cat3',-2.793), ('kcat_AG3',-.5095), ('KD_AA_allo1',2.290), ('KD_AA_allo2',.1001), ('KD_AA_allo3',-.3808), ('KD_AG_allo1',2.280), ('KD_AG_allo2', np.log10(cox2_model.parameters['kr_AG_allo2'].value/cox2_model.parameters['kf_AG_allo2'].value)), ('KD_AG_allo3',1.650)}   
     
     #Select MCMC stepping method
-    step = pm.Dream(nseedchains=120, save_history=True, blocked=True, snooker=0)
+    step = pm.Dream(nseedchains=120, blocked=True, start_random=True, save_history=True, parallel=False, multitry=False, crossover_burnin=50, adapt_crossover=False, snooker=0)
+    #step = pm.Metropolis()
     
-    trace = pm.sample(500000, step, njobs=5)
+    #old_trace = text.load('test')
+    #print 'old trace: ',old_trace['KD_AA_cat2']
     
-    dictionary_to_pickle = {}
-    print len(trace)
-    for dictionary in trace:
-        for var in dictionary:
-           dictionary_to_pickle[var] = trace[var] 
+    trace = pm.sample(300000, step, njobs=3, use_mpi=False)
+    if rank == 0:
+        print 'new trace: ',trace['KD_AA_cat2']
+        dictionary_to_pickle = {}
+        print len(trace)
+        for dictionary in trace:
+            for var in dictionary:
+                dictionary_to_pickle[var] = trace[var] 
     
-    pickle.dump(dictionary_to_pickle, open('COX2_Dream_samples.p', 'wb'))
+        text.dump('2015_06_04_COX2_rerun_with_old_rates', trace)
+    
+        pickle.dump(dictionary_to_pickle, open('2015_06_04_COX2_rerun_with_old_rates.p', 'wb'))
     
