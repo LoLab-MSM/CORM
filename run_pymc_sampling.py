@@ -64,14 +64,14 @@ exp_cond_AA = [0, .5, 1, 2, 4, 8, 16]
 exp_cond_AG = [0, .5, 1, 2, 4, 8, 16]
 
 #Experimentally measured parameter values
-KD_AA_cat1 = np.log10(cox2_model.parameters['kr_AA_cat1'].value/cox2_model.parameters['kf_AA_cat1'].value)
-kcat_AA1 = np.log10(cox2_model.parameters['kcat_AA1'].value)
-KD_AG_cat1 = np.log10(cox2_model.parameters['kr_AG_cat1'].value/cox2_model.parameters['kf_AG_cat1'].value)
-kcat_AG1 = np.log10(cox2_model.parameters['kcat_AG1'].value)
-KD_AG_allo3 = np.log10(cox2_model.parameters['kr_AG_allo3'].value/cox2_model.parameters['kf_AG_allo3'].value)
+#KD_AA_cat1 = np.log10(cox2_model.parameters['kr_AA_cat1'].value/cox2_model.parameters['kf_AA_cat1'].value)
+#kcat_AA1 = np.log10(cox2_model.parameters['kcat_AA1'].value)
+#KD_AG_cat1 = np.log10(cox2_model.parameters['kr_AG_cat1'].value/cox2_model.parameters['kf_AG_cat1'].value)
+#kcat_AG1 = np.log10(cox2_model.parameters['kcat_AG1'].value)
+#KD_AG_allo3 = np.log10(cox2_model.parameters['kr_AG_allo3'].value/cox2_model.parameters['kf_AG_allo3'].value)
 
 #Likelihood function to generate simulated data that corresponds to experimental time points
-@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar] \
+@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar, t.dscalar] \
 ,otypes=[t.dmatrix, t.dmatrix])
 def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3, \
     KD_AG_cat1, kcat_AG1, KD_AG_cat2, KD_AG_cat3, kcat_AG3, KD_AA_allo1, KD_AA_allo2, KD_AA_allo3, KD_AG_allo1, KD_AG_allo2, KD_AG_allo3):
