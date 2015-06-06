@@ -147,25 +147,25 @@ def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3,
     #print 'PGG_error: ', np.sum(PGG_array-exp_data_PGG)
     return PG_array, PGG_array
 
-@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
+@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox1(KD_AA_cat1, KD_AA_cat3, KD_AA_allo1, KD_AA_allo2):
     box1 = (1/(10**KD_AA_cat1))*(1/(10**KD_AA_allo2))*(10**KD_AA_cat3)*(10**KD_AA_allo1)
     #print 'box1: ',box1
     return np.array(box1, dtype='float64')
     
-@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
+@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox2(KD_AA_allo1, KD_AA_allo3, KD_AG_cat1, KD_AG_cat3):
     box2 = (1/(10**KD_AA_allo1))*(1/(10**KD_AG_cat3))*(10**KD_AA_allo3)*(10**KD_AG_cat1)
     #print 'box2: ',box2
     return np.array(box2, dtype='float64')
     
-@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
+@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox3(KD_AA_cat1, KD_AA_cat2, KD_AG_allo1, KD_AG_allo2):
     box3 = (1/(10**KD_AG_allo1))*(1/(10**KD_AA_cat2))*(10**KD_AG_allo2)*(10**KD_AA_cat1)
     #print 'box3: ',box3
     return np.array(box3, dtype='float64')
 
-@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar], otypes=[t.dscalar])
+@theano.compile.ops.as_op(itypes=[t.dscalar, t.dscalar, t.dscalar, t.dscalar], otypes=[t.dscalar])
 def likelihood_thermobox4(KD_AG_cat1, KD_AG_cat2, KD_AG_allo1, KD_AG_allo3):
     box4 = (1/(10**KD_AG_cat1))*(1/(10**KD_AG_allo3))*(10**KD_AG_cat2)*(10**KD_AG_allo1)
     #print 'box4: ',box4
