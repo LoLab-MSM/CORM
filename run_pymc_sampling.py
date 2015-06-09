@@ -94,7 +94,7 @@ def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3,
     
     #Sub in parameter values at current location in parameter space
     cox2_model.parameters['kf_AA_cat1'].value = 10**generic_kf
-    cox2_model.parameters['kr_AA_cat1'].value = 10**(KD_AA_cat1*generic_kf)
+    cox2_model.parameters['kr_AA_cat1'].value = 10**(KD_AA_cat1+generic_kf)
     cox2_model.parameters['kcat_AA1'].value = 10**kcat_AA1
     cox2_model.parameters['kf_AA_cat2'].value = 10**generic_kf
     cox2_model.parameters['kr_AA_cat2'].value = 10**(KD_AA_cat2+generic_kf)
@@ -103,7 +103,7 @@ def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3,
     cox2_model.parameters['kr_AA_cat3'].value = 10**(KD_AA_cat3+generic_kf)
     cox2_model.parameters['kcat_AA3'].value = 10**kcat_AA3
     cox2_model.parameters['kf_AG_cat1'].value = 10**generic_kf
-    cox2_model.parameters['kr_AG_cat1'].value = 10**(KD_AG_cat1*generic_kf)
+    cox2_model.parameters['kr_AG_cat1'].value = 10**(KD_AG_cat1+generic_kf)
     cox2_model.parameters['kcat_AG1'].value = 10**kcat_AG1
     cox2_model.parameters['kf_AG_cat2'].value = 10**generic_kf
     cox2_model.parameters['kr_AG_cat2'].value = 10**(KD_AG_cat2+generic_kf)
@@ -119,7 +119,7 @@ def likelihood(KD_AA_cat1, kcat_AA1, KD_AA_cat2, kcat_AA2, KD_AA_cat3, kcat_AA3,
     cox2_model.parameters['kf_AG_allo1'].value = 10**generic_kf
     cox2_model.parameters['kr_AG_allo1'].value = 10**(KD_AG_allo1+generic_kf)
     cox2_model.parameters['kf_AG_allo3'].value = 10**generic_kf
-    cox2_model.parameters['kr_AG_allo3'].value = 10**(KD_AG_allo2*generic_kf)
+    cox2_model.parameters['kr_AG_allo3'].value = 10**(KD_AG_allo2+generic_kf)
     cox2_model.parameters['kf_AG_allo2'].value = 10**generic_kf
     cox2_model.parameters['kr_AG_allo2'].value = 10**(KD_AG_allo2+generic_kf)
     
@@ -245,7 +245,7 @@ with model:
             for var in dictionary:
                 dictionary_to_pickle[var] = trace[var] 
     
-        text.dump('2015_06_06_COX2_rerun_no_fixed_parameters', trace)
+        text.dump('2015_06_06_COX2_rerun_no_fixed_parameters_2', trace)
     
-        pickle.dump(dictionary_to_pickle, open('2015_06_06_COX2_rerun_no_fixed_parameters.p', 'wb'))
+        pickle.dump(dictionary_to_pickle, open('2015_06_06_COX2_rerun_no_fixed_parameters_2.p', 'wb'))
     
