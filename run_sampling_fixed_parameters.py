@@ -28,7 +28,7 @@ solver = Solver(cox2_model, tspan)
 
 #Add import of experimental data here
 #location = '/Users/Erin/git/COX2/exp_data/'
-location= 'home/shockle/git/COX2_kinetics/exp_data'
+location= '/home/shockle/COX2_kinetics/exp_data'
 exp_data_PG = np.loadtxt(location+'exp_data_pg.txt')
 exp_data_PGG = np.loadtxt(location+'exp_data_pgg.txt')
 
@@ -60,12 +60,6 @@ pysb_sampled_parameter_names = ['kr_AA_cat2', 'kcat_AA2', 'kr_AA_cat3', 'kcat_AA
 kfs_to_change = ['kf_AA_cat2', 'kf_AA_cat3', 'kf_AG_cat2', 'kf_AG_cat3', 'kf_AA_allo1', 'kf_AA_allo2', 'kf_AA_allo3', 'kf_AG_allo1', 'kf_AG_allo2']
 kf_idxs = [i for i, param in enumerate(cox2_model.parameters) if param.name in kfs_to_change]
 print 'kf idxs: ',kf_idxs
-
-old_results = np.load('/Users/Erin/git/COX2/results/2015_02_02_COX2_all_traces.npy')
-results_ordering = ['kcat_AA2', 'kcat_AA3', 'kr_AG_cat3', 'kr_AG_cat2', 'kr_AG_allo2', 'kr_AG_allo1', 'kr_AA_allo1', 'kr_AA_allo2', 'kr_AA_allo3', 'kcat_AG3', 'kr_AA_cat3', 'kr_AA_cat2']
-
-new_ordering_dict = {name: idx for idx, name in enumerate(pysb_sampled_parameter_names)}
-old_ordering_dict = {name: idx for idx, name in enumerate(results_ordering)}
 
 #Likelihood function to generate simulated data that corresponds to experimental time points
 def likelihood(parameter_vector):    
@@ -170,6 +164,7 @@ nchains = 5
 #start_val = [param.mu for param in sampled_parameter_names]
 #starts = start_val + (np.random.random((nchains, len(start_val)))*.01)
 #starts = [np.array([param.mu for param in sampled_parameter_names]) for i in range(5)]
+
 for idx in kf_idxs:
     cox2_model.parameters[idx].value = 10**generic_kf
 
