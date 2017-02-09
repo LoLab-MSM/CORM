@@ -36,39 +36,51 @@ Initial(PGG(), PGG_0)
 #the forward reaction is association; the reverse is disassociation
 
 #Rates for AA and COX2 interactions at catalytic site
+#AA binding/turnover at catalytic site with nothing in allosteric site
 Parameter('kf_AA_cat1', 1000.0)
 Parameter('kr_AA_cat1', 830) 
-Parameter('kcat_AA1', 1.3) 
+Parameter('kcat_AA1', 1.3)
+#AA binding/turnover at catalytic site with 2-AG in the allosteric site
 Parameter('kf_AA_cat2', 1.0e-3)
 Parameter('kr_AA_cat2', 3.3e-6)
 Parameter('kcat_AA2', 2.3)
+##AA binding/turnover at catalytic site with AA in the allosteric site
 Parameter('kf_AA_cat3', 1.0e-3)
 Parameter('kr_AA_cat3', 8.3e-6)
 Parameter('kcat_AA3', 1.3)
 
 #Rates for 2-AG and COX2 interactions at catalytic site
+#2-AG binding/turnover at catalytic site with nothing in the allosteric site
 Parameter('kf_AG_cat1', 1000.0)
 Parameter('kr_AG_cat1', 760.0) 
-Parameter('kcat_AG1', 1.2) 
+Parameter('kcat_AG1', 1.2)
+#2-AG binding at catalytic site with 2-AG in the allosteric site (substrate inhibition means no turnover occurs)
 Parameter('kf_AG_cat2', 1.0e-3)
 Parameter('kr_AG_cat2', 4.8e-4)
+#2-AG binding/turnover at catalytic site with AA in the allosteric site
 Parameter('kf_AG_cat3', 1.0e-3)
 Parameter('kr_AG_cat3', 1.9e-6)
 Parameter('kcat_AG3', 0.21)
 
 #Rates for AA and COX2 interactions at allosteric site
+#AA binding at allosteric site with nothing in the catalytic site
 Parameter('kf_AA_allo1', 1000.0)
 Parameter('kr_AA_allo1', 1.0e5)
+#AA binding at allosteric site with AA in the catalytic site
 Parameter('kf_AA_allo2', 1000.0)
 Parameter('kr_AA_allo2', 1000.0)
+#AA binding at allosteric site with 2-AG in the catalytic site
 Parameter('kf_AA_allo3', 1000.0)
 Parameter('kr_AA_allo3', 250.0)
 
 #Rates for 2-AG and COX2 interactions at allosteric site
+#2-AG binding at allosteric site with nothing in the catalytic site
 Parameter('kf_AG_allo1', 1000.0)
 Parameter('kr_AG_allo1', 1.0e5)
+#2-AG binding at allosteric site with AA in the catalytic site
 Parameter('kf_AG_allo2', 1000.0)
 Parameter('kr_AG_allo2', 400.0)
+#2-AG binding at allosteric site with 2-AG in the catalytic site
 Parameter('kf_AG_allo3', 1000.0)
 Parameter('kr_AG_allo3', 63000.0) 
 
