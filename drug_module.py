@@ -31,6 +31,24 @@ def ibuprofen_binding_COX2(indp_cat=True, indp_allo=True):
              COX2(allo=None) + IBU(b=None) <> COX2(allo=1) % IBU(b=1),
              kf_IBU_allo1, kr_IBU_allo1)
 
+def COX2_substrate_ibuprofen_binding():
+
+    Rule('bind_COX2alloIBU_AA',
+         COX2(allo=1, cat=None) % IBU(b=1) + AA(b=None) <> COX2(allo=1, cat=2) % IBU(b=1) % AA(b=2),
+         kf_AA_cat1, kr_AA_cat1)
+
+    Rule('bind_COX2alloIBU_AG',
+         COX2(allo=1, cat=None) % IBU(b=1) + AG(b=None) <> COX2(allo=1, cat=2) % IBU(b=1) % AG(b=2),
+         kf_AG_cat1, kr_AG_cat1)
+
+    Rule('bind_COX2catIBU_AA',
+         COX2(cat=1, allo=None) % IBU(b=1) + AA(b=None) <> COX2(allo=2, cat=1) % IBU(b=1) % AA(b=2),
+         kf_AA_allo1, kr_AA_allo1)
+
+    Rule('bind_COX2catIBU_AG',
+         COX2(cat=1, allo=None) % IBU(b=1) + AG(b=None) <> COX2(allo=2, cat=1) % IBU(b=1) % AG(b=2),
+         kf_AG_allo1, kr_AG_allo1)
+
 def ibuprofen_COX2_catalysis(AAcat=True, AGcat=False):
 
     if AAcat:
